@@ -466,4 +466,47 @@ ul { list-style: none; }
   display: flex; justify-content: space-between; align-items: center;
 }
 .footer__copy { font-size: 13px; color: var(--text-muted); }
-.footer__legal { display: flex; gap: 24p
+.footer__legal { display: flex; gap: 24px; }
+.footer__legal a { font-size: 13px; color: var(--text-muted); transition: color 0.2s; }
+.footer__legal a:hover { color: var(--text-secondary); }
+
+/* ── Divider ─────────────────────────────────────────────── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .card-grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .pillars { grid-template-columns: repeat(2, 1fr); }
+  .pillar { border-right: none; border-bottom: 1px solid var(--border); }
+  .pillar:nth-child(2n) { }
+  .footer__grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .section { padding: 64px 0; }
+  .card-grid--2, .card-grid--3 { grid-template-columns: 1fr; }
+  .card-grid--4 { grid-template-columns: 1fr; }
+  .pillars { grid-template-columns: 1fr; }
+  .two-col, .two-col--narrow { grid-template-columns: 1fr; gap: 40px; }
+  .process-step { grid-template-columns: 1fr; gap: 24px; }
+  .footer__grid { grid-template-columns: 1fr; }
+  .footer__base { flex-direction: column; gap: 16px; text-align: center; }
+  .form-row { grid-template-columns: 1fr; }
+
+  /* Mobile nav */
+  .nav__links { display: none; }
+  .nav__toggle { display: block; }
+  .nav__links.open {
+    display: flex; flex-direction: column; gap: 0;
+    position: fixed; top: 72px; left: 0; right: 0;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+  }
+  .nav__links.open a { padding: 12px 24px; font-size: 14px; }
+  .nav__dropdown-menu {
+    position: static; display: block; border: none;
+    background: none; box-shadow: none; padding: 0;
+  }
+  .nav__dropdown-menu a { padding-left: 40px; }
+}
