@@ -80,12 +80,12 @@ ul { list-style: none; }
 .nav__dropdown > a::after { content: ' ▾'; font-size: 10px; }
 .nav__dropdown-menu {
   display: none;
-  position: absolute; top: calc(100% + 16px); left: 0;
+  position: absolute; top: 100%; left: 0;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   min-width: 240px;
-  padding: 8px 0;
+  padding: 16px 0 8px; /* top padding bridges the gap so hover doesn't break */
   box-shadow: 0 16px 40px rgba(0,0,0,0.5);
 }
 .nav__dropdown:hover .nav__dropdown-menu { display: block; }
