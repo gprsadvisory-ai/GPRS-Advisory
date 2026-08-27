@@ -129,8 +129,7 @@ ul { list-style: none; }
   background-repeat: no-repeat;
 }
 .hero--photo::before {
-  background:
-    linear-gradient(rgba(8,15,30,0.72), rgba(8,15,30,0.72));
+  background: none;
 }
 .hero__eyebrow {
   font-size: 13px; font-weight: 700; letter-spacing: 0.18em;
