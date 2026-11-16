@@ -52,28 +52,28 @@
           <div class="section-label" style="margin-bottom:16px;">Speak with our team.</div>
           <p style="font-size:16px;color:var(--text-secondary);line-height:1.75;margin-bottom:32px;">Whether you are exploring a sale, considering a capital raise or planning a transition, we are happy to have a direct, confidential conversation. We typically respond within one business day.</p>
 
-          <form class="contact-form" onsubmit="handleSubmit(event)">
+          <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
             <div class="form-row">
               <div class="form-group">
                 <label>First Name</label>
-                <input type="text" placeholder="First name" required>
+                <input type="text" name="first_name" placeholder="First name" required>
               </div>
               <div class="form-group">
                 <label>Last Name</label>
-                <input type="text" placeholder="Last name" required>
+                <input type="text" name="last_name" placeholder="Last name" required>
               </div>
             </div>
             <div class="form-group">
               <label>Email Address</label>
-              <input type="email" placeholder="your@email.com" required>
+              <input type="email" name="email" placeholder="your@email.com" required>
             </div>
             <div class="form-group">
               <label>Company / Business Name</label>
-              <input type="text" placeholder="Company name">
+              <input type="text" name="company" placeholder="Company name">
             </div>
             <div class="form-group">
               <label>Nature of Enquiry</label>
-              <select>
+              <select name="enquiry_type">
                 <option value="">Select an option</option>
                 <option>Transaction Advisory (sell-side)</option>
                 <option>Capital Partnering</option>
@@ -83,10 +83,11 @@
             </div>
             <div class="form-group">
               <label>Message</label>
-              <textarea placeholder="Brief description of what you would like to discuss..."></textarea>
+              <textarea name="message" placeholder="Brief description of what you would like to discuss..."></textarea>
             </div>
             <button type="submit" class="btn btn--primary" style="align-self:flex-start;">Send message &nbsp;→</button>
             <p id="formSuccess" style="display:none;color:var(--accent);font-size:14px;margin-top:8px;">Thank you — we will be in touch within one business day.</p>
+            <p id="formError" style="display:none;color:#b42318;font-size:14px;margin-top:8px;">Sorry, something went wrong. Please email us directly at <a href="mailto:george.p@gprscapital.com.au">george.p@gprscapital.com.au</a>.</p>
           </form>
         </div>
 
@@ -96,7 +97,7 @@
 
             <div style="margin-bottom:4px;font-size:18px;font-weight:700;">George Polydoros</div>
             <div style="font-size:13px;font-weight:600;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:12px;">Founder · Principal</div>
-            <p style="font-size:14px;color:var(--text-muted);margin-bottom:12px;line-height:1.6;">1/726 High St, Kew East VIC 3102<br>Melbourne, Australia</p>
+            <p style="font-size:14px;color:var(--text-muted);margin-bottom:12px;line-height:1.6;">Level 1, 726 High Street, Kew East VIC 3102<br>Melbourne, Australia</p>
             <a href="mailto:george.p@gprscapital.com.au" style="display:block;font-size:15px;color:var(--text-secondary);margin-bottom:6px;transition:color .2s;"
                onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-secondary)'">george.p@gprscapital.com.au</a>
             <a href="https://linkedin.com/in/george-polydoros" target="_blank" style="display:block;font-size:15px;color:var(--accent);margin-bottom:28px;">LinkedIn →</a>
@@ -120,11 +121,34 @@
   </section>
 </main>
 <script>
+// Paste your Formspree form ID between the quotes, e.g. 'xyzabcde' (from https://formspree.io/f/xyzabcde)
+var FORMSPREE_ID = '';
+var FALLBACK_EMAIL = 'george.p@gprscapital.com.au';
+
 function handleSubmit(e) {
   e.preventDefault();
-  document.getElementById('formSuccess').style.display = 'block';
-  e.target.querySelector('button').disabled = true;
-  e.target.querySelector('button').textContent = 'Sent ✓';
+  var form = e.target, btn = form.querySelector('button');
+  var ok = document.getElementById('formSuccess'), err = document.getElementById('formError');
+  ok.style.display = 'none'; err.style.display = 'none';
+
+  // Until a Formspree ID is set, open the visitor's email app so no enquiry is lost
+  if (!FORMSPREE_ID) {
+    var d = new FormData(form);
+    var body = 'Name: ' + d.get('first_name') + ' ' + d.get('last_name') + '\nEmail: ' + d.get('email') +
+               '\nCompany: ' + d.get('company') + '\nEnquiry: ' + d.get('enquiry_type') + '\n\n' + d.get('message');
+    window.location.href = 'mailto:' + FALLBACK_EMAIL + '?subject=' + encodeURIComponent('Website enquiry') + '&body=' + encodeURIComponent(body);
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Sending…';
+  fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+    method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' }
+  }).then(function (r) {
+    if (r.ok) { ok.style.display = 'block'; btn.textContent = 'Sent ✓'; form.reset(); }
+    else { throw new Error('failed'); }
+  }).catch(function () {
+    err.style.display = 'block'; btn.disabled = false; btn.innerHTML = 'Send message &nbsp;→';
+  });
 }
 </script>
 
@@ -138,7 +162,7 @@ function handleSubmit(e) {
         <div class="footer__contact">
           <a href="mailto:george.p@gprscapital.com.au">george.p@gprscapital.com.au</a>
           <a href="tel:+61412245530">+61 412 245 530</a>
-          <span style="font-size:13px;color:var(--text-muted);display:block;margin-top:4px;">1/726 High St, Kew East VIC 3102<br>Melbourne, Australia</span>
+          <span style="font-size:13px;color:var(--text-muted);display:block;margin-top:4px;">Level 1, 726 High Street, Kew East VIC 3102<br>Melbourne, Australia</span>
           <a href="https://linkedin.com/in/george-polydoros" target="_blank">LinkedIn →</a>
         </div>
       </div>
